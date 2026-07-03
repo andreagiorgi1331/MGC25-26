@@ -8,6 +8,11 @@ public interface Monster {
     String getName();
 
     /**
+     * @return Il tipo del mostro.
+     */
+    MonsterType getType();
+
+    /**
      * @return Le statistiche di base del mostro.
      */
     MonsterStats getBaseStats();
