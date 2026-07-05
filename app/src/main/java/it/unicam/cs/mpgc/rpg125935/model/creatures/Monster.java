@@ -38,4 +38,20 @@ public interface Monster {
      * @return true se i Pv attuali sono scesi a 0 o meno.
      */
     boolean isFainted();
+
+    /**
+     * @return Il livello attuale del mostro.
+     */
+    int getLevel();
+
+    /**
+     * @return I punti esperienza (XP) attuali.
+     */
+    int getExperience();
+
+    /**
+     * Aggiunge punti esperienza al mostro. Se supera la soglia, sale di livello.
+     * @param xp La quantità di esperienza da aggiungere.
+     */
+    void addExperience(int xp);
 }

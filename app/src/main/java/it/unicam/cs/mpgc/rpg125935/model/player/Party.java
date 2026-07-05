@@ -12,7 +12,7 @@ import it.unicam.cs.mpgc.rpg125935.model.creatures.Monster;
 public class Party {
     
     private static final int MAX_SIZE = 4;
-    private final List<Monster> monsters = new ArrayList<>();
+    private List<Monster> monsters = new ArrayList<>();
 
     /**
      * Aggiunge un mostro alla squadra se c'è spazio disponibile.

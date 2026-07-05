@@ -1,27 +1,23 @@
 package it.unicam.cs.mpgc.rpg125935.model.creatures;
 
-/**
- * Implementazione base di una creatura nel gioco.
- * Gestisce lo stato attuale dei Punti Vita (PV) e le operazioni di danno/cura.
- */
 public class BasicMonster implements Monster {
 
-    private final String name;
-    private final MonsterType type;
-    private final MonsterStats baseStats;
+    private String name;
+    private MonsterType type;
+    private MonsterStats baseStats; // NON più final!
     private int currentPv;
+    
+    // Nuovi attributi per il livello
+    private int level;
+    private int experience;
 
-    /**
-     * Costruisce un nuovo BasicMonster.
-     * * @param name      Il nome del mostro.
-     * @param type      Il tipo elementale del mostro.
-     * @param baseStats Le statistiche di base.
-     */
     public BasicMonster(String name, MonsterType type, MonsterStats baseStats) {
         this.name = name;
         this.type = type;
         this.baseStats = baseStats;
         this.currentPv = baseStats.maxPv();
+        this.level = 1;
+        this.experience = 0;
     }
 
     @Override
@@ -64,4 +60,51 @@ public class BasicMonster implements Monster {
     public boolean isFainted() {
         return this.currentPv <= 0;
     }
+
+    @Override
+    public int getLevel() {
+        return this.level;
+    }
+
+    @Override
+    public int getExperience() {
+        return this.experience;
+    }
+
+    @Override
+    public void addExperience(int xp) {
+        if (xp < 0) throw new IllegalArgumentException("L'XP non può essere negativa");
+        
+        this.experience += xp;
+        
+        // Calcolo della soglia (Es. Livello 1 = 100 XP, Livello 2 = 200 XP, ecc.)
+        int requiredXp = this.level * 100;
+        
+        // Usiamo un while nel caso in cui ottenga così tanta XP da fare più livelli insieme
+        while (this.experience >= requiredXp) {
+            this.experience -= requiredXp;
+            levelUp();
+            requiredXp = this.level * 100; // Aggiorna la soglia per il prossimo ciclo
+        }
+    }
+
+    /**
+     * Gestisce l'aumento delle statistiche.
+     */
+    private void levelUp() {
+        this.level++;
+        
+        // Aumentiamo tutte le statistiche del 10% (moltiplicatore 1.1)
+        int newMaxPv = (int) Math.round(baseStats.maxPv() * 1.1);
+        int newAtk = (int) Math.round(baseStats.attack() * 1.1);
+        int newDef = (int) Math.round(baseStats.defense() * 1.1);
+        int newMagic = (int) Math.round(baseStats.magic() * 1.1);
+        int newSpd = (int) Math.round(baseStats.speed() * 1.1);
+
+        this.baseStats = new MonsterStats(newMaxPv, newAtk, newDef, newMagic, newSpd);
+        
+        // Bonus stile PokéRogue: al passaggio di livello, il mostro si cura un po' o del tutto!
+        this.currentPv = this.baseStats.maxPv();
+    }
+
 }

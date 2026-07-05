@@ -21,4 +21,26 @@ public class MonsterFactory {
         MonsterStats stats = new MonsterStats(110, 15, 15, 25, 20);
         return new BasicMonster("Flora", MonsterType.GRASS, stats);
     }
+
+    /**
+     * Genera un nemico casuale le cui statistiche scalano in base allo stage attuale.
+     * @param stage Il livello di profondità della run.
+     */
+    public static Monster generateRandomEnemy(int stage) {
+        // Le statistiche aumentano progressivamente con lo stage
+        int hp = 40 + (stage * 15);
+        int atk = 10 + (stage * 3);
+        int def = 10 + (stage * 2);
+        int magic = 10 + (stage * 2);
+        int spd = 10 + stage;
+
+        MonsterStats enemyStats = new MonsterStats(hp, atk, def, magic, spd);
+        
+        // Per semplicità, in questa fase diamo un tipo base, ma potresti randomizzarlo!
+        MonsterType[] types = MonsterType.values();
+        MonsterType randomType = types[(int)(Math.random() * types.length)];
+
+        return new BasicMonster("Mostro Livello " + stage, randomType, enemyStats);
+    }
+
 }

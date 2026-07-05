@@ -9,9 +9,9 @@ import java.util.Map;
  */
 public class Player {
 
-    private final String name;
-    private final Party party;
-    private final Map<String, Integer> inventory; // Associa il nome dell'oggetto alla quantità
+    private String name;
+    private Party party;
+    private Map<String, Integer> inventory; // Associa il nome dell'oggetto alla quantità
 
     public Player(String name) {
         if (name == null || name.trim().isEmpty()) {
