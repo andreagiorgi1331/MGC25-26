@@ -3,6 +3,7 @@
 
 [versions]
 guava = "33.5.0-jre"
+javafx = "24"
 
 [libraries]
 guava = { module = "com.google.guava:guava", version.ref = "guava" }

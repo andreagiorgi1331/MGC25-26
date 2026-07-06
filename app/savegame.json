@@ -1,0 +1,24 @@
+{
+  "name": "Eroe",
+  "party": {
+    "monsters": [
+      {
+        "name": "Ignis",
+        "type": "FIRE",
+        "baseStats": {
+          "maxPv": 100,
+          "attack": 20,
+          "defense": 10,
+          "magic": 15,
+          "speed": 25
+        },
+        "currentPv": 100,
+        "level": 1,
+        "experience": 0
+      }
+    ]
+  },
+  "inventory": {
+    "Pozione Salute": 3
+  }
+}
