@@ -41,29 +41,27 @@ public class HubScreen implements Screen {
         this.stageLabel.setStyle("-fx-font-size: 18px;");
         this.monsterInfoLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: darkblue;");
 
-        this.healBtn = new Button();
-        Button nextStageBtn = new Button("Affronta Prossimo Stage");
-        Button saveBtn = new Button("Salva Partita");
+        this.healBtn = new RetroButton("Usa Pozione Salute");
+        RetroButton nextStageBtn = new RetroButton("Addentrati nell'Oscurità"); // Nome più tematico!
+        RetroButton saveBtn = new RetroButton("Riposa e Salva");
 
-        String btnStyle = "-fx-font-size: 14px; -fx-padding: 8 15;";
-        healBtn.setStyle(btnStyle);
-        nextStageBtn.setStyle("-fx-font-size: 16px; -fx-padding: 10 20; -fx-font-weight: bold; -fx-base: lightgreen;");
-        saveBtn.setStyle(btnStyle);
 
         // Inizializza i testi con i dati reali del Model
         updateUI();
 
         // 2. Comportamento dei Bottoni (Controller Logic)
-        healBtn.setOnAction(e -> handleHeal());
+        this.healBtn.setOnAction(e -> handleHeal());
         
         saveBtn.setOnAction(e -> handleSave());
 
         nextStageBtn.setOnAction(e -> {
             try {
-                // Genera il prossimo nemico e prepara il combattimento
+                // 1. Il Model prepara i dati e il nemico
                 runManager.startNextEncounter();
-                System.out.println("Inizia lo scontro per lo Stage " + runManager.getCurrentStage() + "!");
-                // Prossimamente: app.switchScreen(new BattleScreen(app, runManager));
+                
+                // 2. Il Controller (App) carica la schermata dell'arena
+                app.switchScreen(new BattleScreen(app, runManager, player));
+                
             } catch (IllegalStateException ex) {
                 System.out.println("Errore: " + ex.getMessage());
             }
@@ -72,7 +70,14 @@ public class HubScreen implements Screen {
         // 3. Impaginazione
         VBox layout = new VBox(20);
         layout.setAlignment(Pos.CENTER);
-        layout.getChildren().addAll(titleLabel, stageLabel, monsterInfoLabel, healBtn, nextStageBtn, saveBtn);
+        layout.setStyle("-fx-background-color: #0d0d0d;"); // Grigio scurissimo
+
+        // Colora i testi di bianco/grigio chiaro
+        titleLabel.setStyle("-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #c0c0c0;");
+        this.stageLabel.setStyle("-fx-font-size: 18px; -fx-text-fill: #8B0000;"); // Stage in rosso
+        this.monsterInfoLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: #a6a6a6;"); // Mostro in grigio
+        
+        layout.getChildren().addAll(titleLabel, this.stageLabel, this.monsterInfoLabel, this.healBtn, nextStageBtn, saveBtn);
 
         this.scene = new Scene(layout, App.WINDOW_WIDTH, App.WINDOW_HEIGHT);
     }

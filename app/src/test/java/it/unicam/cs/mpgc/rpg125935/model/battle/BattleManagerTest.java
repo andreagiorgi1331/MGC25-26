@@ -61,4 +61,27 @@ class BattleManagerTest {
 
         assertEquals("La battaglia è già terminata.", exception.getMessage());
     }
+
+    @Test
+    void testSingleParameterPlayTurnChoosesMoveAutomatically() {
+        MonsterStats stats = new MonsterStats(100, 10, 10, 10, 50);
+        BasicMonster player = new BasicMonster("Giocatore", MonsterType.FIRE, stats);
+        BasicMonster enemy = new BasicMonster("Nemico", MonsterType.GRASS, stats);
+
+        BattleManager battle = new BattleManager(player, enemy);
+        Move playerMove = new Move("Attacco Base", new DamageEffect(30, MonsterType.NORMAL));
+
+        // Eseguiamo il turno passando solo la mossa del giocatore
+        Move enemyMove = battle.playTurn(playerMove);
+
+        // La mossa del nemico deve essere stata determinata in automatico ed eseguita
+        assertEquals("Azione", enemyMove.getName());
+
+        // Poiché il tipo dell'attacco del nemico è basato sul suo tipo (GRASS), e il giocatore è FIRE,
+        // verifichiamo che il danno subito dal giocatore consideri l'efficacia (GRASS contro FIRE è 0.5x non efficace).
+        // Formula del danno: 30 * (10 / 10) * 0.5 = 15.
+        // I PV del giocatore dovrebbero essere 100 - 15 = 85.
+        assertEquals(85, player.getCurrentPv());
+        assertEquals(70, enemy.getCurrentPv());
+    }
 }

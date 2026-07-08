@@ -50,4 +50,8 @@ javafx {
 application {
     // Define the main class for the application.
     mainClass = 'it.unicam.cs.mpgc.rpg125935.App'
+    applicationDefaultJvmArgs = [
+        "--enable-native-access=javafx.graphics",
+        "--sun-misc-unsafe-memory-access=allow"
+    ]
 }

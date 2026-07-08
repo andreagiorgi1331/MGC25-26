@@ -2,6 +2,7 @@ package it.unicam.cs.mpgc.rpg125935.model.battle;
 
 import it.unicam.cs.mpgc.rpg125935.model.creatures.Monster;
 import it.unicam.cs.mpgc.rpg125935.model.moves.Move;
+import it.unicam.cs.mpgc.rpg125935.model.moves.DamageEffect;
 
 /**
  * Gestisce la logica di un singolo combattimento 1vs1 a turni.
@@ -14,6 +15,20 @@ public class BattleManager {
     public BattleManager(Monster playerMonster, Monster enemyMonster) {
         this.playerMonster = playerMonster;
         this.enemyMonster = enemyMonster;
+    }
+
+    /**
+     * Esegue un singolo turno di combattimento, determinando la mossa del nemico in automatico.
+     * @param playerMove La mossa scelta dal giocatore.
+     * @return La mossa eseguita dal nemico.
+     */
+    public Move playTurn(Move playerMove) {
+        if (isBattleOver()) {
+            throw new IllegalStateException("La battaglia è già terminata.");
+        }
+        Move enemyMove = new Move("Azione", new DamageEffect(30, enemyMonster.getType()));
+        playTurn(playerMove, enemyMove);
+        return enemyMove;
     }
 
     /**
