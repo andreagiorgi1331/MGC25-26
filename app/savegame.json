@@ -1,24 +1,24 @@
 {
-  "name": "Eroe",
+  "name": "pastecs",
   "party": {
     "monsters": [
       {
         "name": "Ignis",
         "type": "FIRE",
         "baseStats": {
-          "maxPv": 100,
-          "attack": 20,
-          "defense": 10,
-          "magic": 15,
-          "speed": 25
+          "maxPv": 110,
+          "attack": 22,
+          "defense": 11,
+          "magic": 17,
+          "speed": 28
         },
-        "currentPv": 100,
-        "level": 1,
-        "experience": 0
+        "currentPv": 110,
+        "level": 2,
+        "experience": 150
       }
     ]
   },
   "inventory": {
-    "Pozione Salute": 3
+    "Pozione Salute": 7
   }
 }

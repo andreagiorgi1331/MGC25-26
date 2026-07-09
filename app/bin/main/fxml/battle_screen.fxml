@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Ellipse?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.geometry.Insets?>
+
+<!--
+    Battle Screen — Layout Principale del Combattimento
+    Ispirato a PokéRogue / Pokémon classico.
+
+    Struttura:
+    - TOP (arena): Sprite nemico in alto-destra, sprite giocatore in basso-sinistra,
+                    databox nemico in alto-sinistra, databox giocatore in basso-destra.
+    - BOTTOM (commandArea): Layer system — solo un pannello visibile alla volta:
+                    messagePane, actionMenuPane, moveSelectionPane, endBattlePane.
+-->
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="it.unicam.cs.mpgc.rpg125935.view.controller.BattleController"
+            styleClass="battle-root"
+            prefWidth="800" prefHeight="600">
+
+    <!-- ═══════════════ ARENA (CENTER) ═══════════════ -->
+    <center>
+        <AnchorPane fx:id="arenaPane" styleClass="arena-pane"
+                    BorderPane.alignment="CENTER">
+
+            <!-- Titolo Stage (in alto al centro) -->
+            <Label fx:id="stageLabel" styleClass="stage-label" text="Stage 1"
+                   AnchorPane.topAnchor="8" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
+                   alignment="CENTER" maxWidth="1.7976931348623157E308"/>
+
+            <!-- ── Databox Nemico (alto-sinistra) ── -->
+            <fx:include source="components/stat_panel.fxml" fx:id="enemyStatPanel"
+                        AnchorPane.topAnchor="30" AnchorPane.leftAnchor="20"/>
+
+            <!-- ── Sprite Nemico (alto-destra) ── -->
+            <VBox fx:id="enemySpriteArea" alignment="CENTER" spacing="4"
+                  AnchorPane.topAnchor="40" AnchorPane.rightAnchor="60">
+                <StackPane prefWidth="100" prefHeight="100">
+                    <Rectangle fx:id="enemySpritePlaceholder" styleClass="sprite-placeholder"
+                               width="100" height="100"/>
+                    <Label fx:id="enemySpriteLabel" styleClass="sprite-label" text="?"/>
+                </StackPane>
+                <!-- Ombra a terra -->
+                <Ellipse styleClass="sprite-shadow" radiusX="45" radiusY="10"/>
+            </VBox>
+
+            <!-- ── Sprite Giocatore (basso-sinistra) ── -->
+            <VBox fx:id="playerSpriteArea" alignment="CENTER" spacing="4"
+                  AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="60">
+                <StackPane prefWidth="110" prefHeight="110">
+                    <Rectangle fx:id="playerSpritePlaceholder" styleClass="sprite-placeholder"
+                               width="110" height="110"/>
+                    <Label fx:id="playerSpriteLabel" styleClass="sprite-label" text="?"/>
+                </StackPane>
+                <!-- Ombra a terra -->
+                <Ellipse styleClass="sprite-shadow" radiusX="50" radiusY="12"/>
+            </VBox>
+
+            <!-- ── Databox Giocatore (basso-destra) ── -->
+            <fx:include source="components/stat_panel.fxml" fx:id="playerStatPanel"
+                        AnchorPane.bottomAnchor="15" AnchorPane.rightAnchor="20"/>
+
+        </AnchorPane>
+    </center>
+
+    <!-- ═══════════════ COMMAND AREA (BOTTOM) ═══════════════ -->
+    <bottom>
+        <StackPane fx:id="commandArea" styleClass="command-area"
+                   BorderPane.alignment="CENTER">
+            <padding><Insets top="10" right="15" bottom="10" left="15"/></padding>
+
+            <!-- ── Layer 1: Message Box (log di battaglia) ── -->
+            <VBox fx:id="messagePane" alignment="CENTER" spacing="8"
+                  visible="true">
+                <VBox styleClass="message-box" alignment="CENTER_LEFT" spacing="4"
+                      maxWidth="700">
+                    <Label fx:id="battleLog" styleClass="message-text"
+                           text="Preparati alla battaglia!"
+                           wrapText="true" maxWidth="660"/>
+                </VBox>
+            </VBox>
+
+            <!-- ── Layer 2: Action Menu (griglia 2×2) ── -->
+            <GridPane fx:id="actionMenuPane" hgap="8" vgap="8"
+                      alignment="CENTER" visible="false"
+                      maxWidth="500" maxHeight="120">
+                <!-- Riga 0 -->
+                <Button fx:id="attackBtn" text="⚔ Attacca"
+                        styleClass="action-button, action-button-attack"
+                        onAction="#onAttackClicked"
+                        GridPane.columnIndex="0" GridPane.rowIndex="0"
+                        GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"
+                        GridPane.fillWidth="true" GridPane.fillHeight="true"/>
+                <Button fx:id="bagBtn" text="🎒 Zaino"
+                        styleClass="action-button"
+                        onAction="#onBagClicked"
+                        GridPane.columnIndex="1" GridPane.rowIndex="0"
+                        GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"
+                        GridPane.fillWidth="true" GridPane.fillHeight="true"/>
+                <!-- Riga 1 -->
+                <Button fx:id="partyBtn" text="👥 Party"
+                        styleClass="action-button"
+                        onAction="#onPartyClicked"
+                        GridPane.columnIndex="0" GridPane.rowIndex="1"
+                        GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"
+                        GridPane.fillWidth="true" GridPane.fillHeight="true"/>
+                <Button fx:id="fleeBtn" text="🚪 Fuggi"
+                        styleClass="action-button, action-button-flee"
+                        onAction="#onFleeClicked"
+                        GridPane.columnIndex="1" GridPane.rowIndex="1"
+                        GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"
+                        GridPane.fillWidth="true" GridPane.fillHeight="true"/>
+
+                <!-- Column constraints per distribuzione uniforme -->
+                <columnConstraints>
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50"/>
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50"/>
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints vgrow="ALWAYS" percentHeight="50"/>
+                    <RowConstraints vgrow="ALWAYS" percentHeight="50"/>
+                </rowConstraints>
+            </GridPane>
+
+            <!-- ── Layer 3: Move Selection (griglia 2×2 + Indietro) ── -->
+            <VBox fx:id="moveSelectionPane" alignment="CENTER" spacing="8"
+                  visible="false" maxWidth="520">
+                <GridPane fx:id="moveGrid" hgap="8" vgap="8"
+                          alignment="CENTER" maxHeight="100">
+                    <!-- I bottoni delle mosse vengono creati dinamicamente dal Controller -->
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="ALWAYS" percentWidth="50"/>
+                        <ColumnConstraints hgrow="ALWAYS" percentWidth="50"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints vgrow="ALWAYS" percentHeight="50"/>
+                        <RowConstraints vgrow="ALWAYS" percentHeight="50"/>
+                    </rowConstraints>
+                </GridPane>
+                <Button fx:id="moveBackBtn" text="← Indietro"
+                        styleClass="back-button"
+                        onAction="#onMoveBackClicked"/>
+            </VBox>
+
+            <!-- ── Layer 4: End Battle Panel ── -->
+            <VBox fx:id="endBattlePane" alignment="CENTER" spacing="14"
+                  visible="false">
+                <VBox styleClass="end-battle-panel" alignment="CENTER" spacing="12"
+                      maxWidth="400">
+                    <Label fx:id="endBattleTitle" styleClass="end-battle-title"
+                           text="Battaglia Terminata"/>
+                    <Label fx:id="endBattleMessage" styleClass="end-battle-message"
+                           text="" wrapText="true" maxWidth="340"/>
+                    <Button fx:id="continueBtn" text="▶ Continua"
+                            styleClass="continue-button"
+                            onAction="#onContinueClicked"/>
+                </VBox>
+            </VBox>
+
+        </StackPane>
+    </bottom>
+
+</BorderPane>

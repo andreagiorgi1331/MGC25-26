@@ -14,10 +14,22 @@ public class RunManager {
     private final Player player;
     private int currentStage;
     private BattleManager currentBattle;
+    private int slotIndex; // 1, 2, o 3
 
-    public RunManager(Player player) {
+    public RunManager(Player player, int slotIndex) {
         this.player = player;
         this.currentStage = 0;
+        this.slotIndex = slotIndex;
+    }
+
+    public RunManager(Player player, int currentStage, int slotIndex) {
+        this.player = player;
+        this.currentStage = currentStage;
+        this.slotIndex = slotIndex;
+    }
+
+    public int getSlotIndex() {
+        return slotIndex;
     }
 
     public int getCurrentStage() {
@@ -57,21 +69,24 @@ public class RunManager {
      * Conclude lo scontro attuale. Se il giocatore ha vinto, ottiene una ricompensa.
      */
     public void resolveEncounter() {
-        if (currentBattle == null || !currentBattle.isBattleOver()) {
-            throw new IllegalStateException("Il combattimento non è ancora finito o iniziato.");
-        }
+        if (currentBattle != null) {
+            if (currentBattle.getWinner() == player.getParty().getActiveMonster()) {
+                Monster myMonster = player.getParty().getActiveMonster();
+                Monster enemy = currentBattle.getEnemyMonster();
 
-        if (currentBattle.getWinner() == currentBattle.getPlayerMonster()) {
-            // Vittoria: Ricompensa in oggetti
-            player.addItem("Pozione Salute", 1);
+                // 1. Calcolo ed erogazione XP (usando i tuoi metodi!)
+                int xpGained = enemy.getLevel() * 50; 
+                myMonster.addExperience(xpGained);
+
+                System.out.println("Scontro Vinto! " + myMonster.getName() + " guadagna " + xpGained + " XP!");
+
+                // 2. Progressione e Drop
+                currentStage++;
+                player.addItem("Pozione Salute", 1);
+            }
             
-            // Vittoria: Assegnazione Punti Esperienza (scala in base allo stage)
-            int xpReward = 50 + (currentStage * 25); 
-            player.getParty().getActiveMonster().addExperience(xpReward);
-            
-            currentBattle = null; 
-        } else {
-            currentBattle = null;
+            // 3. Resettiamo sempre la battaglia per l'Hub
+            this.currentBattle = null;
         }
     }
 }

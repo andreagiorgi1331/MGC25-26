@@ -26,7 +26,13 @@ public class BattleManager {
         if (isBattleOver()) {
             throw new IllegalStateException("La battaglia è già terminata.");
         }
-        Move enemyMove = new Move("Azione", new DamageEffect(30, enemyMonster.getType()));
+        Move enemyMove;
+        if (enemyMonster.getMoves() != null && !enemyMonster.getMoves().isEmpty()) {
+            int randIndex = (int) (Math.random() * enemyMonster.getMoves().size());
+            enemyMove = enemyMonster.getMoves().get(randIndex);
+        } else {
+            enemyMove = it.unicam.cs.mpgc.rpg125935.model.moves.MoveFactory.createMove("Azione");
+        }
         playTurn(playerMove, enemyMove);
         return enemyMove;
     }

@@ -1,5 +1,8 @@
 package it.unicam.cs.mpgc.rpg125935.model.creatures;
 
+import java.util.List;
+import it.unicam.cs.mpgc.rpg125935.model.moves.Move;
+
 /*** Interfaccia base che definisce il comportamento di una creatura nel gioco.*/
 public interface Monster {
     /**
@@ -54,4 +57,15 @@ public interface Monster {
      * @param xp La quantità di esperienza da aggiungere.
      */
     void addExperience(int xp);
+
+    /**
+     * @return La lista delle mosse conosciute dal mostro (massimo 4).
+     */
+    List<Move> getMoves();
+
+    /**
+     * Aggiunge una mossa al set conosciuto dal mostro.
+     * @param move La mossa da apprendere.
+     */
+    void addMove(Move move);
 }

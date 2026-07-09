@@ -8,28 +8,35 @@ import it.unicam.cs.mpgc.rpg125935.model.creatures.MonsterType;
 import it.unicam.cs.mpgc.rpg125935.model.moves.DamageEffect;
 import it.unicam.cs.mpgc.rpg125935.model.moves.Move;
 import it.unicam.cs.mpgc.rpg125935.model.player.Player;
-import javafx.geometry.Pos;
+import it.unicam.cs.mpgc.rpg125935.view.controller.BattleController;
+import it.unicam.cs.mpgc.rpg125935.view.handler.BattleViewHandler;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 
-public class BattleScreen implements Screen {
+import java.io.IOException;
+import java.util.List;
+
+/**
+ * Schermata di combattimento — implementa sia {@link Screen} (per la navigazione)
+ * che {@link BattleViewHandler} (Presenter, per gestire le azioni dell'utente).
+ *
+ * Questa classe fa da ponte tra il Controller FXML (pura presentazione)
+ * e il Model (logica di business). Non contiene codice di layout/styling
+ * (tutto in FXML + CSS), e non contiene logica di combattimento
+ * (tutto nel BattleManager).
+ */
+public class BattleScreen implements Screen, BattleViewHandler {
 
     private final Scene scene;
     private final App app;
     private final RunManager runManager;
     private final Player player;
     private final BattleManager battleManager;
+    private final BattleController controller;
 
-    private final Label enemyInfo;
-    private final Label playerInfo;
-    private final Label battleLog;
-    private final HBox actionButtonsBox;
-    private final Button returnToHubBtn;
-
-
+    // Mosse disponibili per il turno corrente
+    private final List<Move> availableMoves;
 
     public BattleScreen(App app, RunManager runManager, Player player) {
         this.app = app;
@@ -37,96 +44,164 @@ public class BattleScreen implements Screen {
         this.player = player;
         this.battleManager = runManager.getCurrentBattle();
 
-        // --- 1. Elementi Grafici ---
-        VBox layout = new VBox(30);
-        layout.setAlignment(Pos.CENTER);
-        layout.setStyle("-fx-background-color: #000000;"); // Nero assoluto
+        // --- 1. Caricamento FXML ---
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/fxml/battle_screen.fxml")
+            );
+            Parent root = loader.load();
+            this.controller = loader.getController();
 
+            // --- 2. Connessione Presenter ---
+            controller.setHandler(this);
 
-        Label title = new Label("Battaglia - Stage " + runManager.getCurrentStage());
-        title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #5c0000;"); // Rosso scuro
+            // --- 3. Creazione Scena con CSS ---
+            this.scene = new Scene(root, App.WINDOW_WIDTH, App.WINDOW_HEIGHT);
+            scene.getStylesheets().add(
+                getClass().getResource("/css/battle.css").toExternalForm()
+            );
 
+        } catch (IOException e) {
+            throw new RuntimeException("Impossibile caricare battle_screen.fxml", e);
+        }
 
-        // Info Nemico (Rosso)
-        enemyInfo = new Label();
-        enemyInfo.setStyle("-fx-font-size: 18px; -fx-text-fill: darkred;");
+        // --- 4. Preparazione Mosse ---
+        Monster playerMonster = player.getParty().getActiveMonster();
+        this.availableMoves = playerMonster.getMoves();
 
-        // Log della Battaglia (Cosa succede)
-        battleLog = new Label("Un " + battleManager.getEnemyMonster().getName() + " selvatico appare!");
-        battleLog.setStyle("-fx-font-size: 16px; -fx-font-style: italic; -fx-text-fill: #cccccc;"); // Grigio cenere
-
-        // Info Giocatore (Blu)
-        playerInfo = new Label();
-        playerInfo.setStyle("-fx-font-size: 18px; -fx-text-fill: darkblue;");
-
-        // --- 2. Creazione delle Mosse ---
-        // (In futuro queste mosse le prenderemo direttamente dal Monster)
-        Move lightAttack = new Move("Attacco Rapido", new DamageEffect(30, MonsterType.NORMAL));
-        Move heavyAttack = new Move("Colpo Elementale", new DamageEffect(60, player.getParty().getActiveMonster().getType()));
-
-        RetroButton btnLight = new RetroButton(lightAttack.getName() + " (Pot: 30)");
-        RetroButton btnHeavy = new RetroButton(heavyAttack.getName() + " (Pot: 60)");
-
-        btnLight.setOnAction(e -> executeTurn(lightAttack));
-        btnHeavy.setOnAction(e -> executeTurn(heavyAttack));
-
-        actionButtonsBox = new HBox(20, btnLight, btnHeavy);
-        actionButtonsBox.setAlignment(Pos.CENTER);
-
-        // Bottone per tornare all'Hub a fine battaglia (nascosto all'inizio)
-        returnToHubBtn = new RetroButton("Ritorna all'Accampamento");
-        returnToHubBtn.setVisible(false);
-        returnToHubBtn.setOnAction(e -> {
-            runManager.resolveEncounter(); // Prende le ricompense / XP
-            app.switchScreen(new HubScreen(app, runManager, player)); // Torna all'Hub
-        });
-
-        // --- 3. Assembliamo la scena ---
-        updateUI(); // Imposta i PV iniziali
-
-        layout.getChildren().addAll(title, enemyInfo, battleLog, playerInfo, actionButtonsBox, returnToHubBtn);
-        this.scene = new Scene(layout, App.WINDOW_WIDTH, App.WINDOW_HEIGHT);
+        // --- 5. Popolazione Dati Iniziali dal Model ---
+        initializeBattleUI();
     }
 
     /**
-     * Esegue il turno passando la mossa al BattleManager.
+     * Popola la UI con i dati iniziali della battaglia dal Model.
      */
-    private void executeTurn(Move playerMove) {
-        // Facciamo calcolare i danni e le velocità al Model!
-        Move enemyMove = battleManager.playTurn(playerMove);
-        
-        battleLog.setText("Hai usato " + playerMove.getName() + "!\nIl nemico risponde con " + enemyMove.getName() + "!");
-        
-        updateUI();
+    private void initializeBattleUI() {
+        Monster enemy = battleManager.getEnemyMonster();
+        Monster playerMon = battleManager.getPlayerMonster();
 
-        // Controllo Fine Battaglia
+        // Stage
+        controller.setStage(runManager.getCurrentStage());
+
+        // Dati nemico
+        controller.setEnemyData(
+            enemy.getName(), enemy.getLevel(), enemy.getType(),
+            enemy.getCurrentPv(), enemy.getBaseStats().maxPv()
+        );
+
+        // Dati giocatore (con EXP)
+        int expToNext = playerMon.getLevel() * 100; // Soglia dal Model
+        controller.setPlayerData(
+            playerMon.getName(), playerMon.getLevel(), playerMon.getType(),
+            playerMon.getCurrentPv(), playerMon.getBaseStats().maxPv(),
+            playerMon.getExperience(), expToNext
+        );
+
+        // Mosse
+        controller.setMoves(availableMoves);
+
+        // Messaggio iniziale
+        controller.showBattleLog("Un " + enemy.getName() + " selvatico appare!");
+    }
+
+    /**
+     * Aggiorna tutte le barre e i dati nella UI con lo stato corrente del Model.
+     */
+    private void refreshUI() {
+        Monster enemy = battleManager.getEnemyMonster();
+        Monster playerMon = battleManager.getPlayerMonster();
+
+        controller.updateEnemyHp(enemy.getCurrentPv(), enemy.getBaseStats().maxPv());
+        controller.updatePlayerHp(playerMon.getCurrentPv(), playerMon.getBaseStats().maxPv());
+
+        int expToNext = playerMon.getLevel() * 100;
+        controller.updatePlayerExp(playerMon.getExperience(), expToNext);
+    }
+
+    // ══════════════════════════════════════════════
+    //  IMPLEMENTAZIONE BattleViewHandler (Presenter)
+    // ══════════════════════════════════════════════
+
+    @Override
+    public void onMoveSelected(int moveIndex) {
+        if (moveIndex < 0 || moveIndex >= availableMoves.size()) return;
+
+        Move playerMove = availableMoves.get(moveIndex);
+
+        // Delega al Model per calcolare il turno
+        Move enemyMove = battleManager.playTurn(playerMove);
+
+        // Aggiorna la UI con i risultati
+        refreshUI();
+
+        // Mostra il log del turno
+        String logMessage = "Hai usato " + playerMove.getName() + "!\n"
+                          + "Il nemico risponde con " + enemyMove.getName() + "!";
+
+        // Controlla fine battaglia
         if (battleManager.isBattleOver()) {
             Monster winner = battleManager.getWinner();
-            if (winner == battleManager.getPlayerMonster()) {
-                battleLog.setText("Hai vinto! " + winner.getName() + " ha sconfitto il nemico.");
+            boolean playerWon = (winner == battleManager.getPlayerMonster());
+
+            if (playerWon) {
+                controller.showEndBattle(true,
+                    winner.getName() + " ha sconfitto il nemico!\n" + logMessage);
             } else {
-                battleLog.setText("Sei stato sconfitto... Game Over.");
+                // Il mostro del giocatore è andato K.O.: viene rimosso dal party (permadeath)
+                Monster faintedMonster = battleManager.getPlayerMonster();
+                player.getParty().removeMonster(faintedMonster);
+                
+                if (player.getParty().getMonsters().isEmpty()) {
+                    controller.showEndBattle(false,
+                        faintedMonster.getName() + " è esausto! Non hai altri mostri disponibili. Game Over.\n" + logMessage);
+                } else {
+                    Monster nextMonster = player.getParty().getActiveMonster();
+                    controller.showEndBattle(false,
+                        faintedMonster.getName() + " è esausto ed è stato rimosso dal party!\n" +
+                        "Puoi continuare l'esplorazione con " + nextMonster.getName() + ".\n" + logMessage);
+                }
             }
-            
-            // Nascondiamo gli attacchi e mostriamo il tasto per tornare all'hub
-            actionButtonsBox.setVisible(false);
-            returnToHubBtn.setVisible(true);
+        } else {
+            // Battaglia continua: mostra log → poi menu azioni
+            controller.showBattleLog(logMessage);
         }
     }
 
-    /**
-     * Aggiorna i testi dei Punti Vita.
-     */
-    private void updateUI() {
-        Monster enemy = battleManager.getEnemyMonster();
-        Monster me = battleManager.getPlayerMonster();
-
-        enemyInfo.setText(String.format("NEMICO: %s | PV: %d/%d | Tipo: %s", 
-                enemy.getName(), enemy.getCurrentPv(), enemy.getBaseStats().maxPv(), enemy.getType()));
-
-        playerInfo.setText(String.format("TUO MOSTRO: %s | PV: %d/%d | Tipo: %s", 
-                me.getName(), me.getCurrentPv(), me.getBaseStats().maxPv(), me.getType()));
+    @Override
+    public void onBagSelected() {
+        // TODO: Implementare schermata inventario in una fase successiva
+        controller.showBattleLog("Lo zaino è vuoto... per ora.");
     }
+
+    @Override
+    public void onPartySelected() {
+        // TODO: Implementare schermata party in una fase successiva
+        controller.showBattleLog("Non puoi cambiare mostro... per ora.");
+    }
+
+    @Override
+    public void onFleeSelected() {
+        // Fuga: torna all'Hub senza ricompense
+        app.switchScreen(new HubScreen(app, runManager, player));
+    }
+
+    @Override
+    public void onEndBattleContinue() {
+        // Risolvi l'incontro (XP, ricompense, etc.)
+        runManager.resolveEncounter();
+        
+        if (player.getParty().getMonsters().isEmpty()) {
+            // Game Over definitivo: torna al menu principale
+            app.switchScreen(new MenuScreen(app));
+        } else {
+            // Torna all'Hub
+            app.switchScreen(new HubScreen(app, runManager, player));
+        }
+    }
+
+    // ══════════════════════════════════════════════
+    //  IMPLEMENTAZIONE Screen
+    // ══════════════════════════════════════════════
 
     @Override
     public Scene getScene() {

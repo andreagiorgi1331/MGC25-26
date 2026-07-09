@@ -1,5 +1,9 @@
 package it.unicam.cs.mpgc.rpg125935.model.creatures;
 
+import java.util.ArrayList;
+import java.util.List;
+import it.unicam.cs.mpgc.rpg125935.model.moves.Move;
+
 public class BasicMonster implements Monster {
 
     private String name;
@@ -10,6 +14,9 @@ public class BasicMonster implements Monster {
     // Nuovi attributi per il livello
     private int level;
     private int experience;
+    
+    // Lista delle mosse conosciute
+    private List<Move> moves = new ArrayList<>();
 
     public BasicMonster(String name, MonsterType type, MonsterStats baseStats) {
         this.name = name;
@@ -107,4 +114,15 @@ public class BasicMonster implements Monster {
         this.currentPv = this.baseStats.maxPv();
     }
 
+    @Override
+    public List<Move> getMoves() {
+        return this.moves;
+    }
+
+    @Override
+    public void addMove(Move move) {
+        if (move != null && this.moves.size() < 4) {
+            this.moves.add(move);
+        }
+    }
 }

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<!--
+    StatPanel — Componente riutilizzabile per il databox di un mostro.
+    Mostra: Nome, Livello, Barra HP (con colori dinamici), HP numerico (opzionale), Barra EXP (opzionale).
+    Istanziabile per il giocatore (con EXP + HP numerico) e per il nemico (solo HP).
+-->
+<VBox fx:id="root"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="it.unicam.cs.mpgc.rpg125935.view.components.StatPanelController"
+      styleClass="stat-panel"
+      spacing="4"
+      maxWidth="280" minWidth="200">
+
+    <!-- Riga 1: Nome Mostro + Livello -->
+    <HBox alignment="CENTER_LEFT" spacing="6">
+        <Label fx:id="nameLabel" styleClass="label-name" text="???"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label fx:id="levelLabel" styleClass="label-level" text="Lv.1"/>
+    </HBox>
+
+    <!-- Riga 2: Tag "HP" + Barra HP -->
+    <HBox alignment="CENTER_LEFT" spacing="6">
+        <Label text="HP" styleClass="label-hp-tag"/>
+        <ProgressBar fx:id="hpBar" styleClass="hp-bar, hp-bar-high"
+                     progress="1.0"
+                     maxWidth="1.7976931348623157E308"
+                     HBox.hgrow="ALWAYS"/>
+    </HBox>
+
+    <!-- Riga 3: HP numerico (solo giocatore, nascosto di default) -->
+    <Label fx:id="hpNumericLabel" styleClass="label-hp-numeric"
+           text="100 / 100"
+           visible="false" managed="false"
+           alignment="CENTER_RIGHT"
+           maxWidth="1.7976931348623157E308"/>
+
+    <!-- Riga 4: Barra EXP (solo giocatore, nascosta di default) -->
+    <HBox fx:id="expBarContainer" alignment="CENTER_LEFT" spacing="6"
+          visible="false" managed="false">
+        <Label text="EXP" styleClass="label-exp-tag"/>
+        <ProgressBar fx:id="expBar" styleClass="exp-bar"
+                     progress="0.0"
+                     maxWidth="1.7976931348623157E308"
+                     HBox.hgrow="ALWAYS"/>
+    </HBox>
+
+</VBox>

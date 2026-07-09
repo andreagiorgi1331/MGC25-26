@@ -1,0 +1,378 @@
+/*
+ * ============================================================
+ *  MonsterRogue — Battle Theme CSS
+ *  Retro RPG / PokéRogue-Inspired Dark Design System
+ * ============================================================
+ */
+
+/* ──────────────── ROOT & GLOBAL ──────────────── */
+
+.root {
+    -fx-font-family: "Press Start 2P", "Courier New", monospace;
+    -fx-font-size: 11px;
+}
+
+.battle-root {
+    -fx-background-color: #0e0e1a;
+}
+
+/* ──────────────── ARENA AREA ──────────────── */
+
+.arena-pane {
+    -fx-background-color: linear-gradient(to bottom, #0e0e1a 0%, #141428 50%, #1a1a2e 100%);
+}
+
+/* Ground shadows beneath sprites */
+.sprite-shadow {
+    -fx-fill: rgba(0, 0, 0, 0.35);
+}
+
+/* Sprite placeholder rectangles */
+.sprite-placeholder {
+    -fx-stroke: #555555;
+    -fx-stroke-width: 2;
+    -fx-arc-width: 6;
+    -fx-arc-height: 6;
+}
+
+.sprite-placeholder-fire   { -fx-fill: linear-gradient(to bottom, #442200, #331100); }
+.sprite-placeholder-water  { -fx-fill: linear-gradient(to bottom, #002244, #001133); }
+.sprite-placeholder-grass  { -fx-fill: linear-gradient(to bottom, #224400, #113300); }
+.sprite-placeholder-normal { -fx-fill: linear-gradient(to bottom, #333333, #222222); }
+
+.sprite-label {
+    -fx-text-fill: #cccccc;
+    -fx-font-size: 10px;
+    -fx-effect: dropshadow(one-pass-box, #000000, 1, 0, 1, 1);
+}
+
+/* ──────────────── STAT PANEL (DATABOX) ──────────────── */
+
+.stat-panel {
+    -fx-background-color: rgba(25, 25, 45, 0.88);
+    -fx-border-color: #555555;
+    -fx-border-width: 2px;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 8 12 8 12;
+    -fx-min-width: 220;
+    -fx-max-width: 280;
+}
+
+.stat-panel-enemy {
+    -fx-border-color: #8B0000;
+}
+
+.stat-panel-player {
+    -fx-border-color: #2a6496;
+}
+
+.label-name {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(one-pass-box, #000000, 1, 0, 1, 1);
+}
+
+.label-level {
+    -fx-text-fill: #a0a0a0;
+    -fx-font-size: 9px;
+}
+
+.label-hp-tag {
+    -fx-text-fill: #f8d030;
+    -fx-font-size: 8px;
+    -fx-font-weight: bold;
+}
+
+.label-hp-numeric {
+    -fx-text-fill: #c0c0c0;
+    -fx-font-size: 9px;
+    -fx-alignment: CENTER_RIGHT;
+}
+
+.label-exp-tag {
+    -fx-text-fill: #42b8d5;
+    -fx-font-size: 7px;
+    -fx-font-weight: bold;
+}
+
+/* ──────────────── HP BAR ──────────────── */
+
+.hp-bar {
+    -fx-pref-height: 10px;
+    -fx-max-height: 10px;
+    -fx-min-height: 10px;
+}
+
+.hp-bar > .track {
+    -fx-background-color: #383838;
+    -fx-background-radius: 3px;
+    -fx-background-insets: 0;
+    -fx-border-color: #282828;
+    -fx-border-width: 1px;
+    -fx-border-radius: 3px;
+}
+
+.hp-bar > .bar {
+    -fx-background-radius: 3px;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+/* HP color states — toggled via styleClass in controller */
+.hp-bar-high > .bar {
+    -fx-background-color: linear-gradient(to bottom, #78f878, #48d048);
+}
+
+.hp-bar-medium > .bar {
+    -fx-background-color: linear-gradient(to bottom, #fff070, #f8d030);
+}
+
+.hp-bar-low > .bar {
+    -fx-background-color: linear-gradient(to bottom, #ff7878, #f85050);
+}
+
+/* ──────────────── EXP BAR ──────────────── */
+
+.exp-bar {
+    -fx-pref-height: 6px;
+    -fx-max-height: 6px;
+    -fx-min-height: 6px;
+}
+
+.exp-bar > .track {
+    -fx-background-color: #383838;
+    -fx-background-radius: 2px;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+}
+
+.exp-bar > .bar {
+    -fx-background-color: linear-gradient(to bottom, #64d8ff, #42b8d5);
+    -fx-background-radius: 2px;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+/* ──────────────── COMMAND AREA (BOTTOM) ──────────────── */
+
+.command-area {
+    -fx-background-color: #0a0a14;
+    -fx-border-color: #555555;
+    -fx-border-width: 2 0 0 0;
+    -fx-min-height: 140;
+    -fx-pref-height: 150;
+}
+
+/* ──────────────── MESSAGE BOX ──────────────── */
+
+.message-box {
+    -fx-background-color: rgba(20, 20, 35, 0.95);
+    -fx-border-color: #aaaaaa;
+    -fx-border-width: 2px;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 14 18 14 18;
+}
+
+.message-text {
+    -fx-text-fill: #e0e0e0;
+    -fx-font-size: 11px;
+    -fx-wrap-text: true;
+    -fx-effect: dropshadow(one-pass-box, #000000, 1, 0, 1, 1);
+}
+
+/* ──────────────── ACTION BUTTONS (2×2 GRID) ──────────────── */
+
+.action-button {
+    -fx-background-color: #1a1a2e;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Press Start 2P", "Courier New", monospace;
+    -fx-padding: 14 10 14 10;
+    -fx-border-color: #444466;
+    -fx-border-width: 2px;
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+    -fx-cursor: hand;
+    -fx-alignment: CENTER;
+    -fx-max-width: 1.7976931348623157E308;
+    -fx-max-height: 1.7976931348623157E308;
+    -fx-effect: dropshadow(one-pass-box, #000000, 2, 0, 1, 1);
+}
+
+.action-button:hover {
+    -fx-background-color: #252545;
+    -fx-border-color: #2de2e6;
+    -fx-text-fill: #ffffff;
+}
+
+.action-button:pressed {
+    -fx-background-color: #0f0f20;
+    -fx-border-color: #2de2e6;
+    -fx-translate-y: 1;
+}
+
+/* Attack button special accent */
+.action-button-attack {
+    -fx-border-color: #8B0000;
+}
+.action-button-attack:hover {
+    -fx-border-color: #ff4444;
+}
+
+/* Flee button subdued */
+.action-button-flee {
+    -fx-border-color: #555555;
+    -fx-text-fill: #999999;
+}
+.action-button-flee:hover {
+    -fx-border-color: #ffa500;
+    -fx-text-fill: #ffa500;
+}
+
+/* ──────────────── MOVE BUTTONS ──────────────── */
+
+.move-button {
+    -fx-background-color: #1a1a2e;
+    -fx-text-fill: #e0e0e0;
+    -fx-font-size: 9px;
+    -fx-font-family: "Press Start 2P", "Courier New", monospace;
+    -fx-padding: 10 8 10 8;
+    -fx-border-width: 2px;
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+    -fx-cursor: hand;
+    -fx-alignment: CENTER;
+    -fx-max-width: 1.7976931348623157E308;
+    -fx-max-height: 1.7976931348623157E308;
+    -fx-effect: dropshadow(one-pass-box, #000000, 2, 0, 1, 1);
+}
+
+.move-button:hover {
+    -fx-background-color: #252545;
+    -fx-text-fill: #ffffff;
+}
+
+.move-button:pressed {
+    -fx-background-color: #0f0f20;
+    -fx-translate-y: 1;
+}
+
+.move-button:disabled {
+    -fx-background-color: #111122;
+    -fx-text-fill: #444444;
+    -fx-border-color: #333333;
+    -fx-cursor: default;
+    -fx-opacity: 0.6;
+}
+
+/* Move type-colored borders */
+.move-type-fire   { -fx-border-color: #f08030; }
+.move-type-water  { -fx-border-color: #6890f0; }
+.move-type-grass  { -fx-border-color: #78c850; }
+.move-type-normal { -fx-border-color: #a8a878; }
+
+.move-type-fire:hover   { -fx-border-color: #ff9944; }
+.move-type-water:hover  { -fx-border-color: #88bbff; }
+.move-type-grass:hover  { -fx-border-color: #99ee66; }
+.move-type-normal:hover { -fx-border-color: #cccc99; }
+
+/* Move PP label */
+.move-pp-label {
+    -fx-text-fill: #888888;
+    -fx-font-size: 7px;
+}
+
+/* Back button in move selection */
+.back-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #888888;
+    -fx-font-size: 9px;
+    -fx-font-family: "Press Start 2P", "Courier New", monospace;
+    -fx-cursor: hand;
+    -fx-padding: 6 12 6 12;
+    -fx-border-color: #444444;
+    -fx-border-width: 1px;
+    -fx-border-radius: 3px;
+}
+
+.back-button:hover {
+    -fx-text-fill: #cccccc;
+    -fx-border-color: #888888;
+}
+
+/* ──────────────── END BATTLE PANEL ──────────────── */
+
+.end-battle-panel {
+    -fx-background-color: rgba(20, 20, 35, 0.95);
+    -fx-border-color: #aaaaaa;
+    -fx-border-width: 2px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-padding: 16 24 16 24;
+}
+
+.end-battle-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(one-pass-box, #000000, 2, 0, 1, 1);
+}
+
+.end-battle-title-win {
+    -fx-text-fill: #48d048;
+}
+
+.end-battle-title-lose {
+    -fx-text-fill: #f85050;
+}
+
+.end-battle-message {
+    -fx-text-fill: #c0c0c0;
+    -fx-font-size: 10px;
+    -fx-wrap-text: true;
+    -fx-text-alignment: CENTER;
+}
+
+.continue-button {
+    -fx-background-color: #1a1a2e;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Press Start 2P", "Courier New", monospace;
+    -fx-padding: 12 28 12 28;
+    -fx-border-color: #48d048;
+    -fx-border-width: 2px;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(one-pass-box, #000000, 2, 0, 1, 1);
+}
+
+.continue-button:hover {
+    -fx-background-color: #252545;
+    -fx-border-color: #78f878;
+}
+
+.continue-button:pressed {
+    -fx-background-color: #0f0f20;
+    -fx-translate-y: 1;
+}
+
+/* ──────────────── STAGE LABEL ──────────────── */
+
+.stage-label {
+    -fx-text-fill: #8B0000;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(one-pass-box, #000000, 1, 0, 1, 1);
+}
+
+/* ──────────────── SEPARATOR LINE ──────────────── */
+
+.arena-separator {
+    -fx-stroke: #333344;
+    -fx-stroke-width: 1;
+}

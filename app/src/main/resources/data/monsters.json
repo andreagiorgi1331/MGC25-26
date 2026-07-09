@@ -1,0 +1,62 @@
+[
+  {
+    "name": "Ignis",
+    "type": "FIRE",
+    "baseStats": { "maxPv": 100, "attack": 20, "defense": 10, "magic": 15, "speed": 25 },
+    "moves": ["Braciere", "Lanciafiamme", "Azione"]
+  },
+  {
+    "name": "Aqua",
+    "type": "WATER",
+    "baseStats": { "maxPv": 120, "attack": 15, "defense": 20, "magic": 10, "speed": 15 },
+    "moves": ["Pistolacqua", "Idropompa", "Scontro"]
+  },
+  {
+    "name": "Flora",
+    "type": "GRASS",
+    "baseStats": { "maxPv": 110, "attack": 15, "defense": 15, "magic": 25, "speed": 20 },
+    "moves": ["Fogliame", "Gigassorbimento", "Graffio"]
+  },
+  {
+    "name": "Rattata",
+    "type": "NORMAL",
+    "baseStats": { "maxPv": 80, "attack": 18, "defense": 12, "magic": 8, "speed": 22 },
+    "moves": ["Azione", "Graffio"]
+  },
+  {
+    "name": "Charmander",
+    "type": "FIRE",
+    "baseStats": { "maxPv": 95, "attack": 22, "defense": 11, "magic": 16, "speed": 23 },
+    "moves": ["Braciere", "Graffio", "Lanciafiamme"]
+  },
+  {
+    "name": "Squirtle",
+    "type": "WATER",
+    "baseStats": { "maxPv": 115, "attack": 16, "defense": 22, "magic": 12, "speed": 16 },
+    "moves": ["Pistolacqua", "Scontro", "Idropompa"]
+  },
+  {
+    "name": "Bulbasaur",
+    "type": "GRASS",
+    "baseStats": { "maxPv": 105, "attack": 16, "defense": 16, "magic": 24, "speed": 18 },
+    "moves": ["Fogliame", "Azione", "Gigassorbimento"]
+  },
+  {
+    "name": "Pidgey",
+    "type": "NORMAL",
+    "baseStats": { "maxPv": 90, "attack": 15, "defense": 15, "magic": 10, "speed": 20 },
+    "moves": ["Azione", "Scontro"]
+  },
+  {
+    "name": "Snorlax",
+    "type": "NORMAL",
+    "baseStats": { "maxPv": 200, "attack": 30, "defense": 20, "magic": 15, "speed": 5 },
+    "moves": ["Scontro", "Iper Raggio"]
+  },
+  {
+    "name": "Gyarados",
+    "type": "WATER",
+    "baseStats": { "maxPv": 150, "attack": 35, "defense": 20, "magic": 20, "speed": 25 },
+    "moves": ["Idropompa", "Iper Raggio", "Scontro"]
+  }
+]

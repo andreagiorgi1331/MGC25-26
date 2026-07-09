@@ -28,9 +28,8 @@ public class MenuScreen implements Screen {
         RetroButton newGameBtn = new RetroButton("Nuova Partita");
         RetroButton loadGameBtn = new RetroButton("Carica Partita");
 
-        String buttonStyle = "-fx-font-size: 16px; -fx-padding: 10 20; -fx-cursor: hand;";
-        newGameBtn.setStyle(buttonStyle);
-        loadGameBtn.setStyle(buttonStyle);
+        // Non sovrascriviamo lo stile dei RetroButton: 
+        // il loro stile IDLE/HOVER è gestito internamente.
 
         // Label di notifica/errore per il menù (es. se manca il file di salvataggio)
         Label infoLabel = new Label();
@@ -39,42 +38,16 @@ public class MenuScreen implements Screen {
 
         // --- 2. Eventi dei Bottoni ---
         
-        // Nuova Partita: rimanda alla schermata di creazione inserimento nome
+        // Nuova Partita: rimanda alla schermata di scelta dello slot
         newGameBtn.setOnAction(e -> {
-            System.out.println("Transizione alla creazione del personaggio...");
-            app.switchScreen(new SetupScreen(app));
+            System.out.println("Transizione alla selezione slot per nuova partita...");
+            app.switchScreen(new SaveSlotScreen(app, SaveSlotScreen.Mode.NEW_GAME));
         });
 
-        // Carica Partita: Logica di ripristino della sessione dal file JSON
+        // Carica Partita: rimanda alla schermata di scelta dello slot per il caricamento
         loadGameBtn.setOnAction(e -> {
-            File saveFile = new File("savegame.json");
-            
-            // Gestione dell'errore (Input/State Validation): se il file non esiste, avvisiamo l'utente
-            if (!saveFile.exists()) {
-                infoLabel.setText("Nessun salvataggio trovato! Avvia una Nuova Partita.");
-                System.out.println("Errore: file savegame.json non trovato nella radice del progetto.");
-                return;
-            }
-
-            System.out.println("Rilevato file di salvataggio. Avvio deserializzazione...");
-            SaveManager saveManager = new SaveManager();
-            
-            try {
-                // 1. Carichiamo lo stato del giocatore dal JSON
-                Player loadedPlayer = saveManager.loadGame("savegame.json");
-                
-                // 2. Ricostruiamo il gestore della progressione (RunManager)
-                RunManager runManager = new RunManager(loadedPlayer);
-                
-                System.out.println("Partita caricata con successo! Allenatore: " + loadedPlayer.getName());
-                
-                // 3. Traghettiamo l'utente direttamente all'accampamento (Hub)
-                app.switchScreen(new HubScreen(app, runManager, loadedPlayer));
-                
-            } catch (IOException ex) {
-                infoLabel.setText("Errore critico durante il caricamento del file!");
-                System.err.println("Impossibile caricare la partita: " + ex.getMessage());
-            }
+            System.out.println("Transizione alla selezione slot per caricare una partita...");
+            app.switchScreen(new SaveSlotScreen(app, SaveSlotScreen.Mode.LOAD_GAME));
         });
 
         // --- 3. Layout e Scena ---

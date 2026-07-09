@@ -11,7 +11,7 @@ import it.unicam.cs.mpgc.rpg125935.model.creatures.Monster;
  */
 public class Party {
     
-    private static final int MAX_SIZE = 4;
+    private static final int MAX_SIZE = 3;
     private List<Monster> monsters = new ArrayList<>();
 
     /**
@@ -33,6 +33,20 @@ public class Party {
      */
     public List<Monster> getMonsters() {
         return Collections.unmodifiableList(monsters);
+    }
+
+    /**
+     * Rimuove un mostro specifico dal party.
+     */
+    public void removeMonster(Monster monster) {
+        monsters.remove(monster);
+    }
+
+    /**
+     * Rimuove tutti i mostri esausti (PV <= 0) dal party.
+     */
+    public void removeFainted() {
+        monsters.removeIf(Monster::isFainted);
     }
 
     /**

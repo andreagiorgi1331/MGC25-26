@@ -1,0 +1,12 @@
+[
+  { "name": "Azione", "type": "NORMAL", "basePower": 35 },
+  { "name": "Scontro", "type": "NORMAL", "basePower": 40 },
+  { "name": "Graffio", "type": "NORMAL", "basePower": 40 },
+  { "name": "Braciere", "type": "FIRE", "basePower": 40 },
+  { "name": "Lanciafiamme", "type": "FIRE", "basePower": 80 },
+  { "name": "Pistolacqua", "type": "WATER", "basePower": 40 },
+  { "name": "Idropompa", "type": "WATER", "basePower": 90 },
+  { "name": "Fogliame", "type": "GRASS", "basePower": 40 },
+  { "name": "Gigassorbimento", "type": "GRASS", "basePower": 75 },
+  { "name": "Iper Raggio", "type": "NORMAL", "basePower": 120 }
+]

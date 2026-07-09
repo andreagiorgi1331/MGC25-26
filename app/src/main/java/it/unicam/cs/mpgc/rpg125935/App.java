@@ -3,6 +3,7 @@ package it.unicam.cs.mpgc.rpg125935;
 import it.unicam.cs.mpgc.rpg125935.view.MenuScreen;
 import it.unicam.cs.mpgc.rpg125935.view.Screen;
 import javafx.application.Application;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class App extends Application {
@@ -17,6 +18,9 @@ public class App extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("MonsterRogue");
         this.primaryStage.setResizable(false);
+
+        // Carica il font pixel-art prima di creare qualsiasi scena
+        Font.loadFont(getClass().getResourceAsStream("/fonts/PressStart2P-Regular.ttf"), 12);
 
         // Inizializziamo il gioco partendo dal Menu Principale
         switchScreen(new MenuScreen(this));
