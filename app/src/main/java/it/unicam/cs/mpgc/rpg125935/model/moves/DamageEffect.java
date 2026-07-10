@@ -9,8 +9,8 @@ import it.unicam.cs.mpgc.rpg125935.model.creatures.MonsterType;
  */
 public class DamageEffect implements MoveEffect {
 
-    private final int basePower;
-    private final MonsterType moveType;
+    private int basePower;
+    private MonsterType moveType;
 
     public DamageEffect(int basePower, MonsterType moveType) {
         this.basePower = basePower;

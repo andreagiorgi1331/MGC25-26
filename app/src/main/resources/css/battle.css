@@ -198,8 +198,8 @@
     -fx-background-radius: 3px;
     -fx-cursor: hand;
     -fx-alignment: CENTER;
-    -fx-max-width: 1.7976931348623157E308;
-    -fx-max-height: 1.7976931348623157E308;
+    -fx-max-width: 20000px;
+    -fx-max-height: 20000px;
     -fx-effect: dropshadow(one-pass-box, #000000, 2, 0, 1, 1);
 }
 
@@ -246,8 +246,8 @@
     -fx-background-radius: 3px;
     -fx-cursor: hand;
     -fx-alignment: CENTER;
-    -fx-max-width: 1.7976931348623157E308;
-    -fx-max-height: 1.7976931348623157E308;
+    -fx-max-width: 20000px;
+    -fx-max-height: 20000px;
     -fx-effect: dropshadow(one-pass-box, #000000, 2, 0, 1, 1);
 }
 

@@ -9,9 +9,9 @@ import it.unicam.cs.mpgc.rpg125935.model.creatures.MonsterType;
  */
 public class Move {
 
-    private final String name;
-    private final MonsterType type;
-    private final MoveEffect effect;
+    private String name;
+    private MonsterType type;
+    private MoveEffect effect;
 
     public Move(String name, MonsterType type, MoveEffect effect) {
         this.name = name;

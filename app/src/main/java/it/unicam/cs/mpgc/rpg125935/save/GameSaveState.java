@@ -8,9 +8,9 @@ import it.unicam.cs.mpgc.rpg125935.model.player.Player;
  */
 public class GameSaveState {
 
-    private final Player player;
-    private final int currentStage;
-    private final int slotIndex;
+    private Player player;
+    private int currentStage;
+    private int slotIndex;
 
     public GameSaveState(Player player, int currentStage, int slotIndex) {
         this.player = player;
